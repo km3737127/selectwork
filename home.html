@@ -5,178 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>篩選</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: lightgray;
-        }
-
-        .divcenter {
-            text-align: center;
-            margin: auto;
-            width: 80%;
-            padding: 10PX;
-        }
-
-        .seleoption {
-            background-color: white;
-            height: 70px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-        }
-
-        select {
-            background-color: #F0F0F0;
-            width: 250px;
-            height: 30px;
-            border-radius: 3px;
-            margin: 20px;
-        }
-
-        .foodbox {
-            width: auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            overflow: hidden;
-        }
-
-        .foodpic {
-            width: 350px;
-            height: 230px;
-            opacity: 0.5;
-            /*透明度*/
-
-        }
-
-        .foodeffect {
-            height: 230px;
-            position: relative;
-            margin: 0 0 50px 0;
-            background: -webkit-linear-gradient(white, black);
-            background: -o-linear-gradient(white, black);
-            background: -moz-linear-gradient(white, black);
-            background: linear-gradient(white, black);
-            /*漸層效果*/
-        }
-
-        .foodbox img {
-            transform: scale(1, 1);
-            transition: all 0.5s ease-out;
-            /*漸進式效果*/
-        }
-
-        .foodbox img:hover {
-            transform: scale(1.05, 1.05);
-            /*滑入放大效果*/
-        }
-
-        .foodpic:hover {
-            opacity: 1;
-        }
-
-
-        /* 設置圖片內文字位置 */
-        .foodcity {
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: white;
-            background-color: orange;
-        }
-
-        .foodtown {
-            position: absolute;
-            bottom: 45px;
-            left: 0;
-            font-family: sans-serif;
-            font-style: italic;
-            color: #E0E0E0;
-        }
-
-        .foodname {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            font-family: sans-serif;
-            color: white;
-        }
-
-        .foodword {
-            font-family: sans-serif;
-            color: white;
-            display: none;
-        }
-
-        .foodline {
-            color: white;
-            display: none;
-        }
-
-        /* 滑入時文字位置 */
-        .foodeffect:hover .foodtown {
-            bottom: 100px;
-        }
-
-        .foodeffect:hover .foodname {
-            color: #F0F0F0;
-            bottom: 75px;
-        }
-
-        .foodeffect:hover .foodword {
-            color: #F0F0F0;
-            position: absolute;
-            bottom: 0px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            white-space: normal;
-        }
-
-        .foodeffect:hover .foodline {
-            display: block;
-            position: absolute;
-            bottom: 60px;
-        }
-
-        @media screen and (max-width:950px) {
-            .foodbox {
-                justify-content: center;
-            }
-
-            .seleoption {
-                flex-direction: column;
-                background-color: lightgray;
-            }
-
-            select {
-                background-color: #F0F0F0;
-                margin: 10px;
-            }
-        }
-
-
-        /* 設置loading gif位置 */
-        .loading {
-            display: table;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            z-index: 5;
-        }
-
-        .loading .progress {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css" type="text/css">
 </head>
 
 <body>
@@ -185,12 +14,9 @@
             <img src="./image/loading.gif">
         </div>
     </div>
-
-
     <div class="divcenter">
         <h2>農村地方美食小吃特色料理</h2>
     </div>
-
     <div class="divcenter">
         <div class="seleoption">
             <select id="City">
@@ -200,96 +26,12 @@
         </div>
     </div>
     <div class="divcenter">
-
         <div class="foodbox" id="food"></div>
-
     </div>
-
     <div class="divcenter">政府資料開放平台<br>
         <a href="https://data.gov.tw/dataset/6037">https://data.gov.tw/dataset/6037</a>
     </div>
-
-    <script>
-        fetch('/food.json', { method: 'get' })
-            .then(function (response) {
-                return response.json();
-            }).then(function (foods) {
-                let txt = '';
-                for (let i = 0; i < foods.length; i++) {
-                    txt += "<div class='foodeffect'><img class='foodpic' src='" + foods[i].PicURL + "'/><span class='foodcity'>" + foods[i].City + "</span><span class='foodtown'>" + foods[i].Town + "</span><span class='foodname'>" + foods[i].Name + "</span><span class='foodline'>▂▂▂</span><p class='foodword'>" + foods[i].HostWords + "</p></div>";
-                }
-                let str = "<option>請選擇行政區域...</option>";
-                let CityArray = [];
-                for (let i = 0; i < foods.length; i++) {
-                    let flag = true;
-                    CityArray.forEach(ele => {
-                        if (ele == foods[i].City) {
-                            flag = false;
-                        }
-                    });
-                    if (flag) {
-                        CityArray.push(foods[i].City);
-                        str = str + `<option value=${foods[i].City}>${foods[i].City}</option>`;
-                    }
-
-                }
-                document.getElementById("City").innerHTML = str;
-                document.getElementById("food").innerHTML = txt;
-                document.getElementById("Town").innerHTML = "<option>請選擇鄉鎮區...</option>";
-            })
-
-        document.getElementById("City").addEventListener("change", function () {
-            fetch('/food.json', { method: 'get' })
-                .then(function (response) {
-                    return response.json();
-                }).then(function (foods) {
-                    let str = "<option>請選擇鄉鎮區...</option>";
-                    let TownArray = [];
-                    let txt = "";
-                    for (let i = 0; i < foods.length; i++) {
-                        let flag = true;
-                        TownArray.forEach(ele => {
-                            if (ele == foods[i].Town) {
-                                flag = false;
-                            }
-                        });
-                        if (flag && foods[i].City == document.getElementById("City").value) {
-                            TownArray.push(foods[i].Town);
-                            str += `<option value=${foods[i].Town}>${foods[i].Town}</option>`;
-                        }
-                        if (foods[i].City == document.getElementById("City").value) {
-                            txt += "<div class='foodeffect'><img class='foodpic' src='" + foods[i].PicURL + "'/><span class='foodcity'>" + foods[i].City + "</span><span class='foodtown'>" + foods[i].Town + "</span><span class='foodname'>" + foods[i].Name + "</span><span class='foodline'>▂▂▂</span><p class='foodword'>" + foods[i].HostWords + "</p></div>";
-                        }
-                    }
-                    document.getElementById("Town").innerHTML = str;
-                    document.getElementById("food").innerHTML = txt;
-                })
-        });
-
-        document.getElementById("Town").addEventListener("change", function () {
-            console.log(document.getElementById("Town").value);
-            fetch('/food.json', { method: 'get' })
-                .then(function (response) {
-                    return response.json();
-                }).then(function (foods) {
-                    let txt = "";
-                    for (let i = 0; i < foods.length; i++) {
-                        if (foods[i].Town == document.getElementById("Town").value) {
-                            txt += "<div class='foodeffect'><img class='foodpic' src='" + foods[i].PicURL + "'/><span class='foodcity'>" + foods[i].City + "</span><span class='foodtown'>" + foods[i].Town + "</span><span class='foodname'>" + foods[i].Name + "</span><span class='foodline'>▂▂▂</span><p class='foodword'>" + foods[i].HostWords + "</p></div>";
-                        }
-                    }
-                    document.getElementById("food").innerHTML = txt;
-                })
-        });
-    </script>
-
-    <script>
-        // 載入完成後loading gif隱藏
-        window.onload = setTimeout(function () {
-            document.getElementById("loading").style.display = "none"
-        }, 3000)
-    </script>
+    <script src="./javascript.js"></script>
 </body>
-
 
 </html>
